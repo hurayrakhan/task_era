@@ -1,12 +1,14 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { userId: string } }
+  request: NextRequest,
+    context: { params: Promise<{ userId: string }> }
 ) {
+    const { userId } = await context.params;
+
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
     return new NextResponse("Unauthorized", { status: 401 });
@@ -23,7 +25,7 @@ export async function DELETE(
   try {
     // Soft delete the user
     const deletedUser = await prisma.user.update({
-      where: { id: params.userId },
+      where: { id: userId },
       data: {
         deletedAt: new Date(),
         deletedBy: currentUser.id,

@@ -26,7 +26,7 @@ export async function POST(req: Request, context: any) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const updated = await prisma.task.update({ where: { id: taskId }, data: { status: "done" } });
+    const updated = await prisma.task.update({ where: { id: taskId }, data: { status: "COMPLETED" } });
     return NextResponse.json({ task: updated });
   } catch (err) {
     console.error(err);

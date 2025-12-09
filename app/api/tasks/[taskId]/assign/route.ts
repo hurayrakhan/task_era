@@ -32,7 +32,7 @@ export async function PATCH(req: Request, context: any) {
     const member = await prisma.teamMember.findFirst({ where: { teamId: team.id, userId: assigneeId } });
     if (!member) return NextResponse.json({ error: "Assignee not a team member" }, { status: 400 });
 
-    const updated = await prisma.task.update({ where: { id: taskId }, data: { assignedTo: assigneeId, status: "assigned" } });
+    const updated = await prisma.task.update({ where: { id: taskId }, data: { assignedTo: assigneeId, status: "IN_PROGRESS" } });
     return NextResponse.json({ task: updated });
   } catch (err) {
     console.error(err);

@@ -1,12 +1,14 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
-  request: Request,
-  { params }: { params: { userId: string } }
+  request: NextRequest,
+  context: { params: Promise<{ userId: string }> }
 ) {
+  const { userId } = await context.params;
+
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
     return new NextResponse("Unauthorized", { status: 401 });
@@ -27,11 +29,11 @@ export async function PATCH(
 
   try {
     const updatedUser = await prisma.user.update({
-      where: { id: params.userId },
+      where: { id: userId },
       data: { role },
     });
 
-    // Log the activity
+    // Log activity
     await prisma.activityLog.create({
       data: {
         action: "UPDATE_USER_ROLE",
