@@ -10,10 +10,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import logo from "../public/logo.png";
 import Image from "next/image";
 
-// NOTE: This file is a single-file starter layout for Task-Era.
-// It assumes you have a Next.js app with Tailwind CSS and shadcn/ui components wired up.
-// Put this component in app/(components)/TaskEraLayout.tsx or pages/_app.tsx as a shell.
-
 export default function TaskEraLayout() {
   return (
     <div className="min-h-screen bg-gray-50 text-slate-900">
